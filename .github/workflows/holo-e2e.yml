@@ -1,0 +1,51 @@
+name: Holo-E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  holo-e2e:
+    uses: awesome-os/maintenance-workflows/.github/workflows/reusable-holo-e2e.yml@v1
+    with:
+      config-path: holo-ci.json
+      holo-ci-ref: v1
+      e2e-command: |
+        node alignment/verify-alignment.mts
+        node --test components/inmem-linker/inmem-linker.test.mts components/skia/test/skia-cas.test.mts browsers/brave/test/brave-cas.test.mts
+        cat <<'EOF' > /tmp/inmem_c11_probe.c
+        #include "b8g_origin_linker.h"
+        #include <stdio.h>
+        int main(void) {
+          B8gDepModuleV3 mod = { B8G_DEP_ABI_VERSION, B8G_DEP_SKIA, "b8g_skia_abi", "b8p:holo-v11:skia", NULL, NULL, NULL };
+          printf("magic=0x%08X abi=%u dep=%u name=%s\n", B8G_ABI_MAGIC_V3, mod.abi_version, mod.dep_id, mod.name);
+          return (B8G_ABI_MAGIC_V3 == 0x33564742u && mod.abi_version == 3u) ? 0 : 1;
+        }
+        EOF
+        gcc -std=c11 -O2 -Wall -Wextra -Werror -Icomponents/inmem-linker /tmp/inmem_c11_probe.c -o /tmp/inmem_c11_probe
+        /tmp/inmem_c11_probe | tee "$HOLO_E2E_ARTIFACTS/inmem-c11-probe.txt"
+        node --input-type=module -e "
+          import fs from 'node:fs';
+          import { renderSkiaFrameToAnsiHalfBlocks, renderSkiaFrameToKittyProtocol } from './components/skia/src/index.mts';
+          const width = 16, height = 8;
+          const rgba = new Uint8Array(width * height * 4);
+          for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+              const i = (y * width + x) * 4;
+              rgba[i] = (x * 16) & 0xff;
+              rgba[i + 1] = (y * 32) & 0xff;
+              rgba[i + 2] = 220;
+              rgba[i + 3] = 255;
+            }
+          }
+          const ansi = renderSkiaFrameToAnsiHalfBlocks({ width, height, rgba });
+          const kitty = renderSkiaFrameToKittyProtocol({ width, height, rgba });
+          fs.writeFileSync(process.env.HOLO_E2E_ARTIFACTS + '/skia-render.txt', ansi + '\n\n' + kitty + '\n');
+        "
