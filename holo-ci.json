@@ -5,6 +5,7 @@
   "tests": [
     "node alignment/verify-alignment.mts",
     "node --test alignment/verify-alignment.test.mts",
+    "node --test browsers/brave/test/brave-cas.test.mts",
     "node --test components/inmem-linker/inmem-linker.test.mts"
   ],
   "docs": [
