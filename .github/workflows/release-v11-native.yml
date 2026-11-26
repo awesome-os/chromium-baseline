@@ -1,0 +1,158 @@
+name: Release Holo v11 Native (linux-x86_64)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  release-linux-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install libuv development headers & library
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libuv1-dev
+
+      - name: Compile native linux-x86_64 shims and binaries into ./dist-v11
+        run: |
+          set -euo pipefail
+          mkdir -p ./dist-v11
+
+          # 1. All 15 ABI v3 shared libraries (-shared -fPIC)
+          for src in components/inmem-linker/abi-v3-shims/*.cc; do
+            base=$(basename "$src" _export.cc)
+            c++ -std=c++20 -O2 -Wall -Wextra -Werror -fPIC -shared \
+              -Icomponents/inmem-linker "$src" \
+              -o "./dist-v11/lib${base}.so"
+          done
+
+          # 2. inmem-linker proof & benchmark (C++20)
+          c++ -std=c++20 -O2 -Wall -Wextra -Werror \
+            -Icomponents/inmem-linker \
+            components/inmem-linker/b8g_18_dep_origin_proof.cc \
+            -ldl -o ./dist-v11/b8g_18_dep_origin_proof
+
+          c++ -std=c++20 -O2 -Wall -Wextra -Werror \
+            -Icomponents/inmem-linker \
+            components/inmem-linker/b8g_inmem_linker_bench.cc \
+            -ldl -o ./dist-v11/b8g_inmem_linker_bench
+
+          # 3. AngryBird C11 bridges & C++23 engine tests
+          cc -std=c11 -O2 -Wall -Wextra -Werror \
+            components/angrybird/b8g_ladybird_bridges.c \
+            components/angrybird/bridge_test.c \
+            -o ./dist-v11/angrybird_bridge_test
+
+          cc -std=c11 -O2 -Wall -Wextra -Werror -c \
+            components/angrybird/b8g_ladybird_bridges.c \
+            -o /tmp/b8g_ladybird_bridges.o
+
+          g++ -std=c++23 -O2 -Wall -Wextra -Werror \
+            -Icomponents/angrybird \
+            components/angrybird/cpp_engine_test.cpp \
+            components/angrybird/Libraries/LibJS/JIT/HoloHotLoopJIT.cpp \
+            components/angrybird/Libraries/LibWasm/SIMD/Simd128.cpp \
+            /tmp/b8g_ladybird_bridges.o \
+            -o ./dist-v11/angrybird_cpp_engine_test
+
+          # 4. libuv C11 smoke test
+          cc -std=c11 -O2 -Wall -Wextra -Werror -D_POSIX_C_SOURCE=200809L \
+            -Icomponents/libuv/include \
+            components/libuv/src/b8g_libuv.c \
+            components/libuv/src/b8g_libuv_smoke.c \
+            -luv -o ./dist-v11/b8g_libuv_smoke
+
+      - name: Execute all native test binaries and assert exit 0
+        run: |
+          set -euo pipefail
+          ./dist-v11/b8g_18_dep_origin_proof ./dist-v11
+          ./dist-v11/b8g_inmem_linker_bench
+          ./dist-v11/angrybird_bridge_test
+          ./dist-v11/angrybird_cpp_engine_test
+          ./dist-v11/b8g_libuv_smoke
+
+      - name: Generate SHA512SUMS.txt, holo-v11-manifest.json, and tarball
+        run: |
+          set -euo pipefail
+          node -e '
+            const fs = require("node:fs");
+            const path = require("node:path");
+            const crypto = require("node:crypto");
+
+            const distDir = path.resolve("dist-v11");
+            const files = fs.readdirSync(distDir)
+              .filter((f) => f !== "SHA512SUMS.txt" && f !== "holo-v11-manifest.json")
+              .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+
+            const sumLines = [];
+            const artifacts = [];
+            for (const file of files) {
+              const full = path.join(distDir, file);
+              const buf = fs.readFileSync(full);
+              const sha512 = crypto.createHash("sha512").update(buf).digest("hex");
+              sumLines.push(`${sha512}  ${file}`);
+              artifacts.push({
+                name: file,
+                bytes: buf.length,
+                sha512,
+              });
+            }
+
+            fs.writeFileSync(path.join(distDir, "SHA512SUMS.txt"), sumLines.join("\n") + "\n");
+
+            const manifest = {
+              schema: "holo-v11-release.v1",
+              abiMagic: "0x33564742",
+              repo: "awesome-os/chromium-baseline",
+              arch: "linux-x86_64",
+              commit: process.env.GITHUB_SHA || "",
+              artifactCount: artifacts.length,
+              artifacts,
+            };
+            fs.writeFileSync(
+              path.join(distDir, "holo-v11-manifest.json"),
+              JSON.stringify(manifest, null, 2) + "\n"
+            );
+          '
+
+          tar --sort=name --mtime='@0' --owner=0 --group=0 --numeric-owner \
+            -czf chromium-baseline-linux-x86_64-holo-v11.tar.gz \
+            -C dist-v11 .
+
+          ls -lh dist-v11 chromium-baseline-linux-x86_64-holo-v11.tar.gz
+
+      - name: Publish release v11-chromium-baseline-latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="v11-chromium-baseline-latest"
+          ASSETS=(
+            "chromium-baseline-linux-x86_64-holo-v11.tar.gz"
+            "dist-v11/holo-v11-manifest.json"
+            "dist-v11/SHA512SUMS.txt"
+          )
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+            gh release edit "$TAG" \
+              --target "$GITHUB_SHA" \
+              --title "Holo v11 Native Linux x86_64 (chromium-baseline)"
+          else
+            gh release create "$TAG" "${ASSETS[@]}" \
+              --target "$GITHUB_SHA" \
+              --title "Holo v11 Native Linux x86_64 (chromium-baseline)" \
+              --notes "Automated Holo v11 native linux-x86_64 build & verification release."
+          fi
