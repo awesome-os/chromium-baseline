@@ -74,7 +74,7 @@ flowchart TD
 | :--- | :--- | :---: | :---: | :--- |
 | **Sectium Browser** | [`browsers/sectium/`](browsers/sectium/baseline-manifest.mts) | Shared | `0 B` | [`virtual-frame-shell.mts`](browsers/sectium/shell/virtual-frame-shell.mts), [`release-profile.mts`](browsers/sectium/installer/release-profile.mts) |
 | **Electron** | [`browsers/electron/`](browsers/electron/src/index.mts) | Shared | `0 B` | [`hydrate.mts`](browsers/electron/src/hydrate.mts), [`electron-cas.test.mts`](browsers/electron/test/electron-cas.test.mts) |
-| **Brave (Shields)** | [`browsers/brave/`](browsers/brave/src/index.mts) | Shared | `0 B` | [`brave_launcher.c`](browsers/brave/src/brave_launcher.c), [`brave-cas.test.mts`](browsers/brave/test/brave-cas.test.mts) |
+| **Brave (Shields)** | [`browsers/brave/`](browsers/brave/README.md) | Shared | `0 B` | [`README.md`](browsers/brave/README.md), [`brave_launcher.c`](browsers/brave/src/brave_launcher.c), [`brave-cas.test.mts`](browsers/brave/test/brave-cas.test.mts) |
 | **Node.js** | [`runtimes/node/`](runtimes/node/README.md) | Shared | `0 B` | [`alignment.json`](runtimes/node/alignment.json), [`node_launcher.c`](runtimes/node/src/node_launcher.c) |
 | **Deno** | [`runtimes/deno/`](runtimes/deno/README.md) | Shared (`10/10`) | `0 B` | [`alignment.json`](runtimes/deno/alignment.json) |
 | **Bun-Neon** | [`runtimes/bun-neon/`](runtimes/bun-neon/index.mts) | Shared (`12/12`) | `0 B` | [`alignment.json`](runtimes/bun-neon/alignment.json), [`v11-max-lock.json`](runtimes/bun-neon/v11-max-lock.json), [`bun-neon.test.mts`](runtimes/bun-neon/bun-neon.test.mts) |
@@ -90,9 +90,13 @@ flowchart TD
 
 ---
 
-## 3. Verification
+## 3. Live Native Release & `holo-ci@v1` Verification
+
+- **Live Compiled Native Release ([`v11-chromium-baseline-latest`](https://github.com/awesome-os/chromium-baseline/releases/tag/v11-chromium-baseline-latest)):** Built and verified via [`.github/workflows/release-v11-native.yml`](.github/workflows/release-v11-native.yml) on `linux-x86_64` — publishing **`15` `B8G_ABI_MAGIC_V3` (`0x33564742`) `.so` shims**, **`5` native test/proof executables** (`b8g_18_dep_origin_proof`, `b8g_inmem_linker_bench`, `angrybird_bridge_test`, `angrybird_cpp_engine_test`, `b8g_libuv_smoke`), `chromium-baseline-linux-x86_64-holo-v11.tar.gz`, `holo-v11-manifest.json`, and `SHA512SUMS.txt`.
+- **Centralized CI (`holo-ci@v1`):** Verified via [`.github/workflows/holo-ci.yml`](.github/workflows/holo-ci.yml) and [`holo-ci.json`](holo-ci.json) (`zeroGhost`, `zeroCasV1`, docs link integrity, and alignment tests).
 
 ```sh
 npm test
 node alignment/verify-alignment.mts
+holo-ci verify --cwd .
 ```
