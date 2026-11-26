@@ -1,0 +1,17 @@
+{
+  "schema": "holo-ci.v1",
+  "name": "chromium-baseline",
+  "kind": "monorepo",
+  "tests": [
+    "node alignment/verify-alignment.mts",
+    "node --test alignment/verify-alignment.test.mts",
+    "node --test components/inmem-linker/inmem-linker.test.mts"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "guards": {
+    "zeroGhost": true,
+    "zeroCasV1": true
+  }
+}
