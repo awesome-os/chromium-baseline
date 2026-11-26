@@ -21,6 +21,7 @@ export interface AlignmentVerificationResult {
   readonly angrybirdParityCount: number;
   readonly angrybirdMissingCount: number;
   readonly angrybirdEarlyStubCount: number;
+  readonly inmemLinkerTargetsVerified: number;
   readonly errors: readonly string[];
 }
 
@@ -218,6 +219,49 @@ export function verifyBaselineAlignment(
     );
   }
 
+  // 5. Verify components/inmem-linker 18-target B8G-ABI v3 origin linker
+  const inmemDir = join(repoRoot, 'components', 'inmem-linker');
+  const inmemHeaderPath = join(inmemDir, 'b8g_origin_linker.h');
+  const inmemManifestPath = join(inmemDir, 'b8g-stub-roll-manifest.json');
+  const inmemGniPath = join(inmemDir, 'b8g_all_abi_stubs.gni');
+  let inmemLinkerTargetsVerified = 0;
+
+  if (!existsSync(inmemHeaderPath) || !existsSync(inmemManifestPath) || !existsSync(inmemGniPath)) {
+    errors.push('components/inmem-linker missing core B8G-ABI v3 files');
+  } else {
+    const inmemHeader = readFileSync(inmemHeaderPath, 'utf8');
+    if (!inmemHeader.includes('B8G_ABI_MAGIC_V3 0x33564742u') || !inmemHeader.includes('B8gDepModuleV3')) {
+      errors.push('components/inmem-linker/b8g_origin_linker.h missing B8G_ABI_MAGIC_V3 / B8gDepModuleV3 contract');
+    }
+    const stubRoll = JSON.parse(readFileSync(inmemManifestPath, 'utf8')) as {
+      schema: string;
+      abiMagic: string;
+      casLayout: string;
+      casRegistry: string;
+      survivingStubTargets: number;
+      targets: ReadonlyArray<{ chromiumDir: string; abiName: string }>;
+    };
+    const gniText = readFileSync(inmemGniPath, 'utf8');
+    if (
+      stubRoll.schema !== 'b8g.stub-roll.v3' ||
+      stubRoll.abiMagic !== '0x33564742' ||
+      stubRoll.casLayout !== 'v11' ||
+      stubRoll.casRegistry !== 'awesome-os/holo-v11'
+    ) {
+      errors.push('components/inmem-linker/b8g-stub-roll-manifest.json not aligned to Holo v11 / B8G-ABI v3');
+    }
+    for (const target of stubRoll.targets) {
+      if (gniText.includes(`"//${target.chromiumDir}:${target.abiName}"`)) {
+        inmemLinkerTargetsVerified++;
+      } else {
+        errors.push(`components/inmem-linker/b8g_all_abi_stubs.gni missing //${target.chromiumDir}:${target.abiName}`);
+      }
+    }
+    if (inmemLinkerTargetsVerified !== 18 || stubRoll.survivingStubTargets !== 18) {
+      errors.push(`Expected 18 inmem-linker stub targets, got ${inmemLinkerTargetsVerified}`);
+    }
+  }
+
   return {
     ok: errors.length === 0,
     v8ConsumersVerified: lock.v8Baseline.consumers.length,
@@ -226,6 +270,7 @@ export function verifyBaselineAlignment(
     angrybirdParityCount,
     angrybirdMissingCount,
     angrybirdEarlyStubCount,
+    inmemLinkerTargetsVerified,
     errors,
   };
 }

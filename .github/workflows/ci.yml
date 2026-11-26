@@ -50,3 +50,22 @@ jobs:
           cc -std=c11 -D_POSIX_C_SOURCE=200809L -fsyntax-only \
             -Icomponents/libuv/include \
             components/libuv/src/b8g_libuv_smoke.c
+
+      - name: Compile and run components/inmem-linker C++20 proof & benchmark
+        run: |
+          mkdir -p /tmp/b8g-inmem-shims
+          for src in components/inmem-linker/abi-v3-shims/*.cc; do
+            base=$(basename "$src" _export.cc)
+            c++ -std=c++20 -O2 -Wall -Wextra -Werror -fPIC -shared \
+              -Icomponents/inmem-linker "$src" -o "/tmp/b8g-inmem-shims/lib${base}.so"
+          done
+          c++ -std=c++20 -O2 -Wall -Wextra -Werror \
+            -Icomponents/inmem-linker \
+            components/inmem-linker/b8g_18_dep_origin_proof.cc \
+            -ldl -o /tmp/b8g_18_dep_origin_proof
+          /tmp/b8g_18_dep_origin_proof /tmp/b8g-inmem-shims
+          c++ -std=c++20 -O2 -Wall -Wextra -Werror \
+            -Icomponents/inmem-linker \
+            components/inmem-linker/b8g_inmem_linker_bench.cc \
+            -ldl -o /tmp/b8g_inmem_linker_bench
+          /tmp/b8g_inmem_linker_bench

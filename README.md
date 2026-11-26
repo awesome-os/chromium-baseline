@@ -11,6 +11,7 @@ flowchart TD
   SKIA["components/skia"]
   DAWN["components/dawn"]
   UV["components/libuv (1.53.0)"]
+  INMEM["components/inmem-linker (18/18 B8G-ABI v3)"]
   ANGRY["components/angrybird (18/18 C++23 Engine)"]
 
   SECTIUM["browsers/sectium"]
@@ -28,6 +29,7 @@ flowchart TD
   LIBS --> SKIA
   LIBS --> DAWN
   LIBS --> UV
+  LIBS --> INMEM
   LIBS --> ANGRY
 
   V8 --> SECTIUM
@@ -61,6 +63,7 @@ flowchart TD
 | **Skia** | [`components/skia/`](components/skia/src/index.mts) | Skia 148 + Graphite + Dawn + Kitty sink | [`skia-cas.gn`](components/skia/config/skia-cas.gn), [`kitty-ascii-sink.mts`](components/skia/src/kitty-ascii-sink.mts), [`skia-cas.test.mts`](components/skia/test/skia-cas.test.mts) |
 | **Dawn WebGPU** | [`components/dawn/`](components/dawn/src/index.mts) | Standalone monolithic `libwebgpu_dawn` | [`dawn-cas.cmake`](components/dawn/config/dawn-cas.cmake), [`hydrate.mts`](components/dawn/src/hydrate.mts), [`dawn-cas.test.mts`](components/dawn/test/dawn-cas.test.mts) |
 | **libuv** | [`components/libuv/`](components/libuv/README.md) | `1.53.0` + 64-byte `B8G_ARENA_V1` slab pool | [`b8g_libuv.h`](components/libuv/include/b8g_libuv.h), [`b8g_libuv.c`](components/libuv/src/b8g_libuv.c), [`build-zig-cc.mts`](components/libuv/scripts/build-zig-cc.mts) |
+| **In-Memory Linker** | [`components/inmem-linker/`](components/inmem-linker/b8g_origin_linker.h) | `18/18` B8G-ABI v3 (`0x33564742`) W^X origin arena | [`b8g_origin_linker.h`](components/inmem-linker/b8g_origin_linker.h), [`b8g-stub-roll-manifest.json`](components/inmem-linker/b8g-stub-roll-manifest.json), [`b8g_all_abi_stubs.gni`](components/inmem-linker/b8g_all_abi_stubs.gni), [`inmem-linker.test.mts`](components/inmem-linker/inmem-linker.test.mts) |
 | **AngryBird Engine** | [`components/angrybird/`](components/angrybird/README.md) | Sovereign `18/18` C++23/C11 Web Engine | [`b8g_ladybird_bridges.h`](components/angrybird/b8g_ladybird_bridges.h), [`HoloHotLoopJIT.h`](components/angrybird/Libraries/LibJS/JIT/HoloHotLoopJIT.h), [`Simd128.h`](components/angrybird/Libraries/LibWasm/SIMD/Simd128.h), [`WebExtensionsMV3.h`](components/angrybird/Extensions/WebExtensionsMV3.h) |
 | **just-js/lo** | [`components/just-js/lo/`](components/just-js/lo/README.md) | `19/19` v11 CAS, `dup_v8 = 0 B` | [`alignment.json`](components/just-js/lo/alignment.json), [`lo_launcher.c`](components/just-js/lo/lo_launcher.c), [`lo-args.gn`](components/just-js/lo/v8-lo-fastcall/lo-args.gn) |
 | **just-js/just-js** | [`components/just-js/just-js/`](components/just-js/just-js/README.md) | Shared `libv8_monolith` + `libuv` | [`alignment.json`](components/just-js/just-js/alignment.json), [`just_launcher.c`](components/just-js/just-js/just_launcher.c) |

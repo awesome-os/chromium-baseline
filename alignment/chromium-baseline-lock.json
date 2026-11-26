@@ -40,7 +40,8 @@
     "components/blink",
     "components/skia",
     "components/dawn",
-    "components/libuv"
+    "components/libuv",
+    "components/inmem-linker"
   ],
   "angrybird": {
     "path": "components/angrybird",

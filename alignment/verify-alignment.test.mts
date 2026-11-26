@@ -13,5 +13,6 @@ describe('chromium-baseline unified alignment & AngryBird 18/18 parity', () => {
     assert.equal(res.angrybirdParityCount, 18);
     assert.equal(res.angrybirdMissingCount, 0);
     assert.equal(res.angrybirdEarlyStubCount, 0);
+    assert.equal(res.inmemLinkerTargetsVerified, 18);
   });
 });
