@@ -1,0 +1,52 @@
+name: chromium-baseline CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run Node test suites & alignment verification
+        run: |
+          npm test
+          node alignment/verify-alignment.mts
+
+      - name: Compile and run AngryBird C11 bridges test
+        run: |
+          cc -std=c11 -O2 -Wall -Wextra -Werror \
+            components/angrybird/b8g_ladybird_bridges.c \
+            components/angrybird/bridge_test.c \
+            -o bridge_test
+          ./bridge_test
+
+      - name: Compile and run AngryBird C++23 engine test
+        run: |
+          cc -std=c11 -O2 -Wall -Wextra -Werror -c \
+            components/angrybird/b8g_ladybird_bridges.c \
+            -o b8g_ladybird_bridges.o
+          g++ -std=c++23 -O2 -Wall -Wextra -Werror \
+            -Icomponents/angrybird \
+            components/angrybird/cpp_engine_test.cpp \
+            components/angrybird/Libraries/LibJS/JIT/HoloHotLoopJIT.cpp \
+            components/angrybird/Libraries/LibWasm/SIMD/Simd128.cpp \
+            b8g_ladybird_bridges.o \
+            -o cpp_engine_test
+          ./cpp_engine_test
+
+      - name: Syntax check libuv C11 smoke test
+        run: |
+          cc -std=c11 -D_POSIX_C_SOURCE=200809L -fsyntax-only \
+            -Icomponents/libuv/include \
+            components/libuv/src/b8g_libuv_smoke.c

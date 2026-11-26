@@ -1,0 +1,56 @@
+{
+  "schema": "awesome-os.chromium-baseline-lock.v1",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "casRegistry": "awesome-os/holo-v11",
+  "casEnvVar": "B8G_CAS_DIR",
+  "chromiumBaseline": {
+    "milestone": "160.0.8184.0",
+    "channel": "Canary",
+    "branchPosition": 1754429,
+    "v8Version": "16.0.88+"
+  },
+  "v8Baseline": {
+    "version": "16.0.88+",
+    "component": "components/libv8_monolith",
+    "dupV8Bytes": 0,
+    "consumers": [
+      { "id": "sectium", "path": "browsers/sectium", "kind": "browser" },
+      { "id": "electron", "path": "browsers/electron", "kind": "browser" },
+      { "id": "brave", "path": "browsers/brave", "kind": "browser" },
+      { "id": "node", "path": "runtimes/node", "kind": "runtime" },
+      { "id": "deno", "path": "runtimes/deno", "kind": "runtime" },
+      { "id": "bun-neon", "path": "runtimes/bun-neon", "kind": "runtime" },
+      { "id": "lo", "path": "components/just-js/lo", "kind": "runtime" },
+      { "id": "just-js", "path": "components/just-js/just-js", "kind": "runtime" }
+    ]
+  },
+  "sharedV11Libraries": {
+    "openssl": "4.1.0",
+    "harfbuzz": "15.2.0",
+    "zstd": "1.6.0",
+    "zlib-ng": "2.3.3",
+    "libuv": "1.53.0",
+    "vulkan": "1.4.369",
+    "ada": "4.1.1",
+    "mimalloc": "3.7.1"
+  },
+  "chromiumComponents": [
+    "components/libv8_monolith",
+    "components/blink",
+    "components/skia",
+    "components/dawn",
+    "components/libuv"
+  ],
+  "angrybird": {
+    "path": "components/angrybird",
+    "engine": "AngryBird (Sovereign C++23/C11 Web Engine)",
+    "chromeParity": {
+      "implemented": 18,
+      "total": 18,
+      "earlyStub": 0,
+      "missing": 0
+    },
+    "toolchainFile": "components/angrybird/Meta/CMake/holo_v11_toolchain.cmake"
+  }
+}

@@ -1,0 +1,38 @@
+# Awesome-OS Modular Blink Component GN Overlay
+# Wired to awesome-os/holo-v11 (cas-v11) pre-cached shards
+# Consumers: Sectium Browser, Electron, Brave
+
+# 1. Modular component build (eliminates 4-hour static monolith relinks)
+is_debug = false
+is_component_build = true
+symbol_level = 0
+blink_symbol_level = 0
+enable_nacl = false
+
+# 2. Shared V8 shard (components/libv8_monolith + awesome-os/holo-v11)
+v8_use_external_startup_data = true
+v8_enable_pointer_compression = true
+use_custom_libcxx = false
+
+# 3. Pre-cached cas-v11 system C/C++ library shards
+use_system_libbrotli = true
+use_system_libwebp = true
+use_system_expat = true
+use_system_zlib = true
+use_system_libpng = true
+use_system_libjpeg = true
+use_system_harfbuzz = true
+use_system_freetype = true
+
+# 4. Externalized GPU & 2D graphics engine shards (components/skia + components/dawn)
+skia_use_dawn = true
+use_dawn = true
+enable_webgpu = true
+use_skia_cas_shard = true
+use_dawn_cas_shard = true
+use_v8_cas_shard = true
+
+# 5. Sectium display sink & zero-copy ABI boundary
+holo_cas_tag = "cas-v11"
+holo_cas_repo = "awesome-os/holo-v11"
+use_sectium_display_shard = true

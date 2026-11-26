@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+build-zig/
+*.o
+*.obj
+*.exe
+*.so
+*.dll
+*.dylib
+bridge_test
+cpp_engine_test
+.b8g/
+.DS_Store

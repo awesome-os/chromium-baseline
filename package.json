@@ -1,0 +1,12 @@
+{
+  "name": "@awesome-os/chromium-baseline",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Unified Chromium 160 & V8 16.0.88+ Shared-Library Baseline Monorepo over Holo v11 CAS (dup_v8 = 0 B)",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "test": "node --test alignment/verify-alignment.test.mts upstream/chromium-tracker.test.mts components/blink/test/blink-cas.test.mts components/skia/test/skia-cas.test.mts components/dawn/test/dawn-cas.test.mts browsers/sectium/baseline-manifest.test.mts browsers/sectium/shell/virtual-frame-shell.test.mts browsers/sectium/installer/release-profile.test.mts browsers/sectium/installer/security-hardening.test.mts browsers/electron/test/electron-cas.test.mts browsers/brave/test/brave-cas.test.mts runtimes/bun-neon/bun-neon.test.mts",
+    "verify:alignment": "node alignment/verify-alignment.mts"
+  }
+}

@@ -1,0 +1,15 @@
+# Standalone Skia 2D/GPU component build wired to Awesome-OS holo-v11 (cas-v11)
+# Prerequisite C shards (libexpat, libwebp) and holo-llvm are hydrated from holo-v11.
+
+is_component_build = true
+is_official_build = true
+skia_enable_tools = false
+
+# Use system/CAS-hydrated C libraries rather than vendored third_party copies
+skia_use_system_expat = true
+skia_use_system_libwebp = true
+
+# GPU + Graphite + WebGPU (Dawn) backend for Sectium Display, Blink, and Electron
+skia_enable_gpu = true
+skia_enable_graphite = true
+skia_use_dawn = true

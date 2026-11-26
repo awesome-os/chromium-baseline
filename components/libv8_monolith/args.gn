@@ -1,0 +1,13 @@
+# Unified V8 16.0.88+ Shared Component & Holo v11 CAS Build Recipe
+# Consumers: Sectium, Electron, Brave, Node, Deno, Bun-Neon, lo, just-js (dup_v8 = 0 B)
+is_debug = false
+is_component_build = true
+symbol_level = 0
+v8_symbol_level = 0
+v8_use_external_startup_data = true
+v8_expose_public_symbols = true
+v8_enable_sandbox = true
+v8_enable_pointer_compression = true
+v8_enable_i18n_support = true
+use_custom_libcxx = false
+treat_warnings_as_errors = false

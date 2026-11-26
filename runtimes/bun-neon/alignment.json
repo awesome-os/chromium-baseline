@@ -1,0 +1,27 @@
+{
+  "schema": "awesome-os.runtime-alignment.v1",
+  "runtime": "bun-neon",
+  "repo": "awesome-os/bun-neon",
+  "casCoverage": "12/12 (100%)",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "v8Baseline": {
+    "version": "16.0.88+",
+    "component": "components/libv8_monolith",
+    "dupV8Bytes": 0
+  },
+  "libuvBaseline": {
+    "version": "1.53.0",
+    "component": "components/libuv"
+  },
+  "sharedV11Libraries": {
+    "openssl": "4.1.0",
+    "harfbuzz": "15.2.0",
+    "zstd": "1.6.0",
+    "zlib-ng": "2.3.3",
+    "libuv": "1.53.0",
+    "vulkan": "1.4.369",
+    "ada": "4.1.1",
+    "mimalloc": "3.7.1"
+  }
+}

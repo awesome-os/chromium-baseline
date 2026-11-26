@@ -1,0 +1,19 @@
+{
+  "schema": "awesome-os.v11-max-lock.v1",
+  "repo": "awesome-os/bun-neon",
+  "abiMagic": "0x33564742",
+  "casLayout": "v11",
+  "workspaceUri": "workspaces://awesome-os/os-dev",
+  "pins": {
+    "v8": "16.0.88+ (awesome-os/libv8_monolith)",
+    "openssl": "4.1.0",
+    "zstd": "1.6.0",
+    "brotli": "1.2.1",
+    "mimalloc": "3.7.1",
+    "zlib-ng": "2.3.3",
+    "simdutf": "9.5.0",
+    "nghttp2": "1.71.0",
+    "sqlite": "3.54.1",
+    "icu4c": "79.1"
+  }
+}
