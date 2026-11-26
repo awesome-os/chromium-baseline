@@ -1,6 +1,6 @@
 {
   "name": "@awesome-os/chromium-baseline",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "type": "module",
   "private": true,
   "description": "Unified Chromium 160 & V8 16.0.88+ Shared-Library Baseline Monorepo over Holo v11 CAS (dup_v8 = 0 B)",
