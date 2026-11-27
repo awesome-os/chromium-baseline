@@ -1,0 +1,30 @@
+{
+  "schema": "holo-boundary.v1",
+  "plane": 2,
+  "publicEntrypoints": [
+    "alignment/verify-alignment.mts"
+  ],
+  "includePaths": [
+    "alignment",
+    "browsers",
+    "components",
+    "runtimes",
+    "upstream"
+  ],
+  "excludeDirs": [
+    ".git",
+    "node_modules",
+    "build",
+    "dist",
+    "out",
+    ".awesome-oci",
+    ".holo-ci-runtime"
+  ],
+  "forbiddenImports": [
+    "WidevineCdm",
+    "optimization_guide_internal",
+    "GoogleUpdate"
+  ],
+  "maxParentTraversals": 4,
+  "scanSourceHttpIpc": false
+}
