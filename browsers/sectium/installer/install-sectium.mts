@@ -498,7 +498,7 @@ Set-ItemProperty -Path $UninstKey -Name 'Publisher' -Value 'Awesome-OS'
 Set-ItemProperty -Path $UninstKey -Name 'DisplayIcon' -Value "$IconPath,0"
 Set-ItemProperty -Path $UninstKey -Name 'InstallLocation' -Value $InstallDir
 Set-ItemProperty -Path $UninstKey -Name 'UninstallString' -Value "\`"$UninstallCmd\`""
-Set-ItemProperty -Path $UninstKey -Name 'URLInfoAbout' -Value 'https://awesome-os.com'
+Set-ItemProperty -Path $UninstKey -Name 'URLInfoAbout' -Value 'https://awesome-os.github.io/'
 Set-ItemProperty -Path $UninstKey -Name 'EstimatedSize' -Value ${estimatedKb} -Type DWord
 Set-ItemProperty -Path $UninstKey -Name 'NoModify' -Value 1 -Type DWord
 Set-ItemProperty -Path $UninstKey -Name 'NoRepair' -Value 1 -Type DWord
