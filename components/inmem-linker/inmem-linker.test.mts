@@ -59,9 +59,11 @@ function resolveCppCompiler(): {
     if (envZig) {
       return { bin: envZig, prefixArgs: ['c++'] };
     }
-    const workspaceZig = resolve(REPO_ROOT, '..', '..', '..', 'bin', 'zig.cmd');
-    if (existsSync(workspaceZig)) {
-      return { bin: workspaceZig, prefixArgs: ['c++'] };
+    for (let probe = REPO_ROOT, depth = 0; depth < 6; depth += 1, probe = resolve(probe, '..')) {
+      const workspaceZig = resolve(probe, 'bin', 'zig.cmd');
+      if (existsSync(workspaceZig)) {
+        return { bin: workspaceZig, prefixArgs: ['c++'] };
+      }
     }
     return { bin: 'zig', prefixArgs: ['c++'] };
   }
