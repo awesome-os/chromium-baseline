@@ -13,16 +13,20 @@
     {
       "name": "v8",
       "repo": "https://chromium.googlesource.com/v8/v8.git",
-      "pinned_sha": "1f5b29b8",
+      "pinned_sha": "7427a22c",
+      "pinned_commit": "7427a22c9380da167dab7e1a1e46add403e7ed47",
+      "pinned_tree": "96951479d1965c0d09cd79f0aed98513cec7c838",
       "mode": "component",
       "outputs": ["libv8.so", "libv8_libbase.so", "libv8_libplatform.so", "v8.dll"],
-      "headers_tarball": "v8-include-1f5b29b8.tar.gz",
+      "headers_tarball": "v8-include-7427a22c.tar.gz",
       "release_tag": "v0.6.0-v8-cloud"
     },
     {
       "name": "boringssl",
       "repo": "https://boringssl.googlesource.com/boringssl",
       "pinned_sha": "289645a",
+      "pinned_commit": "289645a450721a7210bf9c69d42bf40a0f1ee730",
+      "pinned_tree": "5bb999c9e096b193e0536fa6397fba5cb8067b59",
       "outputs": ["libcrypto.so", "libssl.so"],
       "headers_tarball": "boringssl-include-289645a.tar.gz",
       "release_tag": "v0.6.0-chromium-shards"
@@ -31,6 +35,8 @@
       "name": "brotli",
       "repo": "https://github.com/google/brotli.git",
       "pinned_sha": "fed075f",
+      "pinned_commit": "fed075f48eaffa447243a8e0452a88b103506118",
+      "pinned_tree": "38276c5433dcb0afcce89091d49fdbbee837aaca",
       "outputs": ["libbrotlicommon.so", "libbrotlidec.so", "libbrotlienc.so"],
       "headers_tarball": "brotli-include-fed075f.tar.gz",
       "release_tag": "v0.6.0-chromium-shards"
@@ -39,6 +45,8 @@
       "name": "libwebp",
       "repo": "https://chromium.googlesource.com/webm/libwebp",
       "pinned_sha": "f054d0c",
+      "pinned_commit": "f054d0c32b7aef7cf7093c2fab2d2336e68dce31",
+      "pinned_tree": "295845599745dcbcb975fd3d862570f882522ec7",
       "outputs": ["libwebp.so", "libwebpdemux.so", "libsharpyuv.so"],
       "headers_tarball": "libwebp-include-f054d0c.tar.gz",
       "release_tag": "v0.6.0-chromium-shards"
@@ -47,6 +55,8 @@
       "name": "zlib-ng",
       "repo": "https://github.com/zlib-ng/zlib-ng.git",
       "pinned_sha": "bc98d84",
+      "pinned_commit": "bc98d84fcc1865a842bf1b07dbbc3ac2427a0938",
+      "pinned_tree": "fc81c54c3f7ce75bdefc737c70b19908595799df",
       "outputs": ["libz.so"],
       "headers_tarball": "zlib-include-bc98d84.tar.gz",
       "release_tag": "v0.6.0-chromium-shards"
@@ -55,6 +65,8 @@
       "name": "libpng",
       "repo": "https://github.com/pnggroup/libpng.git",
       "pinned_sha": "73a6865",
+      "pinned_commit": "73a6865278d33ebfb4fe957718d2eaf8316c4ec7",
+      "pinned_tree": "334eb58282cbd09ce8ec5c1e80e011f536d7f2b0",
       "outputs": ["libpng18.so"],
       "headers_tarball": "libpng-include-73a6865.tar.gz",
       "release_tag": "v0.6.0-chromium-shards"
@@ -70,24 +82,36 @@
     {
       "name": "freetype",
       "repo": "https://gitlab.freedesktop.org/freetype/freetype.git",
+      "pinned_sha": "68db2bb4",
+      "pinned_commit": "68db2bb4a471c2e3883697961b4f2244b245aed3",
+      "pinned_tree": "519060ec52e9bd0a186d7940817425bd6d3efac1",
       "outputs": ["libfreetype.so"],
       "release_tag": "v0.6.0-chromium-shards"
     },
     {
       "name": "harfbuzz",
       "repo": "https://github.com/harfbuzz/harfbuzz.git",
+      "pinned_sha": "08358705",
+      "pinned_commit": "0835870585ead2412ff1a8d741b8e0ecf98e155a",
+      "pinned_tree": "d6b6cef690a7309a0d93031590b751f3c74c6c4d",
       "outputs": ["libharfbuzz.so"],
       "release_tag": "v0.6.0-chromium-shards"
     },
     {
       "name": "libjpeg-turbo",
       "repo": "https://github.com/libjpeg-turbo/libjpeg-turbo.git",
+      "pinned_sha": "5b2e0e92",
+      "pinned_commit": "5b2e0e9269f1fff760d867be97b7ba5f79188227",
+      "pinned_tree": "edff73e183aba6f54ef80028ce433d3278bc9828",
       "outputs": ["libjpeg.so", "libturbojpeg.so"],
       "release_tag": "v0.6.0-chromium-shards"
     },
     {
       "name": "expat",
       "repo": "https://github.com/libexpat/libexpat.git",
+      "pinned_sha": "1675c169",
+      "pinned_commit": "1675c1691cb66d10ce645c1fe23437113001cac8",
+      "pinned_tree": "d59b522860e053fe1537569955159f479c3f9248",
       "outputs": ["libexpat.so"],
       "release_tag": "v0.6.0-chromium-shards"
     }

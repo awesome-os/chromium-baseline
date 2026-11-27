@@ -22,6 +22,7 @@ export interface AlignmentVerificationResult {
   readonly angrybirdMissingCount: number;
   readonly angrybirdEarlyStubCount: number;
   readonly inmemLinkerTargetsVerified: number;
+  readonly upstreamGitLocksVerified: number;
   readonly errors: readonly string[];
 }
 
@@ -262,6 +263,50 @@ export function verifyBaselineAlignment(
     }
   }
 
+  // 6. Verify UPSTREAM-LOCK.json Git upstreams have 40-hex pinned_commit, 40-hex pinned_tree, and matching pinned_sha
+  const upstreamLockPath = join(repoRoot, 'upstream', 'UPSTREAM-LOCK.json');
+  let upstreamGitLocksVerified = 0;
+  if (!existsSync(upstreamLockPath)) {
+    errors.push('upstream/UPSTREAM-LOCK.json missing');
+  } else {
+    const upstreamLock = JSON.parse(readFileSync(upstreamLockPath, 'utf8')) as {
+      upstreams?: ReadonlyArray<{
+        name: string;
+        repo: string;
+        pinned_sha?: string;
+        pinned_commit?: string;
+        pinned_tree?: string;
+      }>;
+    };
+    const hex40 = /^[0-9a-f]{40}$/;
+    for (const entry of upstreamLock.upstreams ?? []) {
+      const isArchive = entry.repo.endsWith('.zip') || entry.repo.endsWith('.tar.gz') || entry.repo.endsWith('.tar.xz');
+      if (isArchive) continue;
+
+      let entryOk = true;
+      if (!entry.pinned_commit || !hex40.test(entry.pinned_commit)) {
+        errors.push(`UPSTREAM-LOCK.json:${entry.name} missing/invalid 40-hex pinned_commit`);
+        entryOk = false;
+      }
+      if (!entry.pinned_tree || !hex40.test(entry.pinned_tree)) {
+        errors.push(`UPSTREAM-LOCK.json:${entry.name} missing/invalid 40-hex pinned_tree`);
+        entryOk = false;
+      }
+      if (!entry.pinned_sha || entry.pinned_sha.length < 7) {
+        errors.push(`UPSTREAM-LOCK.json:${entry.name} missing/short pinned_sha`);
+        entryOk = false;
+      } else if (entry.pinned_commit && entry.pinned_sha !== entry.pinned_commit.slice(0, entry.pinned_sha.length)) {
+        errors.push(
+          `UPSTREAM-LOCK.json:${entry.name} pinned_sha "${entry.pinned_sha}" does not match pinned_commit prefix "${entry.pinned_commit.slice(0, entry.pinned_sha.length)}"`,
+        );
+        entryOk = false;
+      }
+      if (entryOk) {
+        upstreamGitLocksVerified++;
+      }
+    }
+  }
+
   return {
     ok: errors.length === 0,
     v8ConsumersVerified: lock.v8Baseline.consumers.length,
@@ -271,6 +316,7 @@ export function verifyBaselineAlignment(
     angrybirdMissingCount,
     angrybirdEarlyStubCount,
     inmemLinkerTargetsVerified,
+    upstreamGitLocksVerified,
     errors,
   };
 }
