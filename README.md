@@ -1,3 +1,5 @@
+<!-- DOC-STATIC-CORPUS -->
+
 # `awesome-os/chromium-baseline`
 
 > **Unified Chromium `160.0.8184.0` & V8 `16.0.88+` Shared-Library Baseline Monorepo** — Aligning V8, Blink, Skia, Dawn, `libuv`, Sectium, Electron, Brave, Node, Deno, Bun-Neon, `lo`, `just-js`, and **`components/angrybird` (Sovereign 18/18 C++23 Web Engine)** over **Holo `v11` CAS** (`B8G_ABI_MAGIC_V3 = 0x33564742`, **`dup_v8 = 0 B`**).

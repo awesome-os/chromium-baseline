@@ -1,3 +1,5 @@
+<!-- DOC-STATIC-CORPUS -->
+
 # AwesomeOS Ladybird — Live Upstream Issue Radar (`LadybirdBrowser/ladybird`)
 
 > Tracks the **13** most active open upstream issues by comment volume — **7** already fixed or accelerated directly inside `awesome-os/ladybird`.
@@ -9,7 +11,7 @@
 | [#3438](https://github.com/LadybirdBrowser/ladybird/issues/3438) | 30 | Crash in Unicode::verify_icu_success with ICU error: U_MISSING_RESOURCE_ERROR | `FIXED_IN_FORK` | Libraries/LibUnicode/ICU.h: downgraded U_MISSING_RESOURCE_ERROR from fatal VERIFY_NOT_REACHED() abort to root-locale fallback warning |
 | [#5030](https://github.com/LadybirdBrowser/ladybird/issues/5030) | 27 | Parts of Modrinth are not rendered correctly | `TRACKED_UPSTREAM` | Monitored in AwesomeOS upstream radar |
 | [#6922](https://github.com/LadybirdBrowser/ladybird/issues/6922) | 20 | WebGL crash on Linux | `FIXED_IN_FORK` | Services/Compositor/OpenGLContext.cpp: fixed null pointer dereference when EGL_EXT_image_dma_buf_import_modifiers is absent on Linux drivers |
-| [#976](https://github.com/LadybirdBrowser/ladybird/issues/976) | 20 | uBlock origin in ladybird | `FIXED_IN_FORK` | Bridges/AwesomeOS (B8gContentBlocker) + Extensions/WebExtensionsMV3.h: native uBlock/EasyList ||domain^ network blocker |
+| [#976](https://github.com/LadybirdBrowser/ladybird/issues/976) | 20 | uBlock origin in ladybird | `FIXED_IN_FORK` | Bridges/AwesomeOS (B8gContentBlocker) + Extensions/WebExtensionsMV3.h: native uBlock/EasyList `\|\|domain^` network blocker |
 | [#38](https://github.com/LadybirdBrowser/ladybird/issues/38) | 20 | Windows support | `ACCELERATED_VIA_HOLO_V11` | Portable C11/C++23 Bridges + Holo v11 CAS hardlinks compile natively on Windows 11 with zig cc / clang without MSVC ABI mismatch |
 | [#5107](https://github.com/LadybirdBrowser/ladybird/issues/5107) | 18 | Support dns HTTPS records | `FIXED_IN_FORK` | Bridges/AwesomeOS (b8g_dns_parse_https_rdata): RFC 9460 DNS TYPE 65 HTTPS/SVCB parser extracting h3/h2 ALPN, port, and ECH |
 | [#7640](https://github.com/LadybirdBrowser/ladybird/issues/7640) | 17 | Turning off monitor causes ladybird segfault on Cosmic DE (root cause in Qt; fixed in Qt 6.10.3/6.11.1) | `TRACKED_UPSTREAM` | Monitored in AwesomeOS upstream radar |
