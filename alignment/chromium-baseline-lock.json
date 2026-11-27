@@ -5,9 +5,9 @@
   "casRegistry": "awesome-os/holo-v11",
   "casEnvVar": "B8G_CAS_DIR",
   "chromiumBaseline": {
-    "milestone": "160.0.8184.0",
+    "milestone": "160.0.8187.0",
     "channel": "Canary",
-    "branchPosition": 1754429,
+    "branchPosition": 1756123,
     "v8Version": "16.0.88+"
   },
   "v8Baseline": {
