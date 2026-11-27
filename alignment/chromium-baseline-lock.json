@@ -15,14 +15,46 @@
     "component": "components/libv8_monolith",
     "dupV8Bytes": 0,
     "consumers": [
-      { "id": "sectium", "path": "browsers/sectium", "kind": "browser" },
-      { "id": "electron", "path": "browsers/electron", "kind": "browser" },
-      { "id": "brave", "path": "browsers/brave", "kind": "browser" },
-      { "id": "node", "path": "runtimes/node", "kind": "runtime" },
-      { "id": "deno", "path": "runtimes/deno", "kind": "runtime" },
-      { "id": "bun-neon", "path": "runtimes/bun-neon", "kind": "runtime" },
-      { "id": "lo", "path": "components/just-js/lo", "kind": "runtime" },
-      { "id": "just-js", "path": "components/just-js/just-js", "kind": "runtime" }
+      {
+        "id": "sectium",
+        "path": "browsers/sectium",
+        "kind": "browser"
+      },
+      {
+        "id": "electron",
+        "path": "browsers/electron",
+        "kind": "browser"
+      },
+      {
+        "id": "brave",
+        "path": "browsers/brave",
+        "kind": "browser"
+      },
+      {
+        "id": "node",
+        "path": "runtimes/node",
+        "kind": "runtime"
+      },
+      {
+        "id": "deno",
+        "path": "runtimes/deno",
+        "kind": "runtime"
+      },
+      {
+        "id": "bun-neon",
+        "path": "runtimes/bun-neon",
+        "kind": "runtime"
+      },
+      {
+        "id": "lo",
+        "path": "components/just-js/lo",
+        "kind": "runtime"
+      },
+      {
+        "id": "just-js",
+        "path": "components/just-js/just-js",
+        "kind": "runtime"
+      }
     ]
   },
   "sharedV11Libraries": {
@@ -53,5 +85,14 @@
       "missing": 0
     },
     "toolchainFile": "components/angrybird/Meta/CMake/holo_v11_toolchain.cmake"
+  },
+  "lockfileVersion": 3,
+  "migrationsApplied": [
+    "v0->v1",
+    "v1->v2",
+    "v2->v3"
+  ],
+  "provenanceChain": {
+    "commitAndTreeBound": true
   }
 }
